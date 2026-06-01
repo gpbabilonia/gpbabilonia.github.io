@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Guada Babilonia</title>
+<link rel="icon" type="image/png" href="tabicon_nb.png">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -17,14 +18,20 @@
     --border: rgba(255,248,231,0.12);
   }
   html { scroll-behavior: smooth; }
-  body { background: var(--dark); color: var(--cream); font-family: 'DM Sans', sans-serif; font-weight: 300; line-height: 1.7; overflow-x: hidden; }
   a { color: inherit; text-decoration: none; }
+  a:hover { color: var(--amber-light); }
+  body { background: var(--dark); color: var(--cream); font-family: 'DM Sans', sans-serif; font-weight: 300; line-height: 1.7; overflow-x: hidden; }
 
   nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 1.25rem 3rem; border-bottom: 0.5px solid var(--border); background: rgba(26,22,16,0.92); backdrop-filter: blur(8px); }
   .nav-name { font-family: 'Playfair Display', serif; font-size: 1rem; letter-spacing: 0.02em; }
   .nav-links { display: flex; gap: 2rem; }
   .nav-links a { font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); transition: color 0.2s; }
   .nav-links a:hover { color: var(--cream); }
+  .nav-toggle { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; }
+  .nav-toggle span { display: block; width: 22px; height: 1.5px; background: var(--cream); transition: all 0.3s; }
+  .nav-toggle.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+  .nav-toggle.open span:nth-child(2) { opacity: 0; }
+  .nav-toggle.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
 
   .hero { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; border-bottom: 0.5px solid var(--border); padding-top: 72px; }
   .hero-left { padding: 5rem 3rem 4rem; border-right: 0.5px solid var(--border); display: flex; flex-direction: column; justify-content: center; }
@@ -39,10 +46,14 @@
   .btn-outline { border: 0.5px solid var(--border); color: var(--cream); }
   .btn-outline:hover { border-color: var(--cream); }
 
-  .hero-right { padding: 5rem 3rem 4rem; display: flex; flex-direction: column; justify-content: flex-end; }
+  .hero-right { padding: 5rem 3rem 4rem; display: flex; flex-direction: column; justify-content: flex-end; position: relative; overflow: hidden; }
+  .hero-right-bg { position: absolute; inset: 0; z-index: 0; }
+  .hero-right-bg img { width: 100%; height: 100%; object-fit: cover; object-position: center top; display: block; }
+  .hero-right-bg::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(26,22,16,0.92) 0%, rgba(26,22,16,0.4) 50%, rgba(26,22,16,0.2) 100%); }
+  .hero-right > *:not(.hero-right-bg) { position: relative; z-index: 1; }
   .hero-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 3rem; }
   .stat-num { font-family: 'Playfair Display', serif; font-size: 2.8rem; font-weight: 400; color: var(--amber-light); line-height: 1; margin-bottom: 0.3rem; }
-  .stat-label { font-size: 0.75rem; color: var(--muted); letter-spacing: 0.08em; line-height: 1.4; }
+  .stat-label { font-size: 0.75rem; color: rgba(255,248,231,0.82); letter-spacing: 0.08em; line-height: 1.4; text-shadow: 0 1px 4px rgba(0,0,0,0.6); }
   .hero-quote { font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.05rem; color: rgba(255,248,231,0.5); line-height: 1.7; border-left: 1px solid var(--amber); padding-left: 1.25rem; }
 
   section { border-bottom: 0.5px solid var(--border); }
@@ -62,25 +73,19 @@
   .detail-val { font-size: 0.9rem; color: rgba(255,248,231,0.8); }
 
   /* TIMELINE */
-  .timeline { position: relative; padding: 1rem 0 2rem; }
-  .timeline::before { content: ''; position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: var(--border); transform: translateX(-50%); }
-  .tl-item { display: grid; grid-template-columns: 1fr 40px 1fr; margin-bottom: 3.5rem; align-items: start; }
+  .timeline { position: relative; padding: 1rem 0 2rem 2.5rem; }
+  .timeline::before { content: ''; position: absolute; left: 5px; top: 0; bottom: 0; width: 1px; background: var(--border); }
+  .tl-item { position: relative; margin-bottom: 2.75rem; }
   .tl-item:last-child { margin-bottom: 0; }
-  .tl-center { display: flex; justify-content: center; padding-top: 0.3rem; }
-  .tl-dot { width: 11px; height: 11px; border-radius: 50%; background: var(--amber); box-shadow: 0 0 0 3px var(--dark), 0 0 0 4px var(--amber); flex-shrink: 0; }
+  .tl-dot { position: absolute; left: -2.5rem; top: 0.35rem; width: 11px; height: 11px; border-radius: 50%; background: var(--amber); box-shadow: 0 0 0 3px var(--dark), 0 0 0 4px var(--amber); }
   .tl-role { font-weight: 500; font-size: 0.95rem; margin-bottom: 0.2rem; color: var(--cream); }
   .tl-org { font-size: 0.82rem; color: var(--amber); line-height: 1.45; }
   .tl-sub { font-size: 0.72rem; color: var(--muted); font-style: italic; margin-top: 0.15rem; }
   .tl-date { font-size: 0.73rem; color: var(--muted); margin-top: 0.35rem; }
 
-  .tl-item.on-right .tl-col-a { padding-right: 2rem; visibility: hidden; }
-  .tl-item.on-right .tl-col-b { padding-left: 2rem; }
-  .tl-item.on-left .tl-col-a { padding-right: 2rem; text-align: right; }
-  .tl-item.on-left .tl-col-b { padding-left: 2rem; visibility: hidden; }
-
   /* CARDS */
   .card-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
-  .proj-box { border: 0.5px solid var(--border); padding: 1.75rem; border-radius: 2px; transition: border-color 0.2s; }
+  .proj-box { border: 0.5px solid var(--border); padding: 1.75rem; border-radius: 2px; transition: border-color 0.2s; overflow: hidden; }
   .proj-box:hover { border-color: rgba(200,137,42,0.4); }
   .proj-box-tag { font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--amber); margin-bottom: 0.75rem; }
   .proj-box-title { font-family: 'Playfair Display', serif; font-size: 0.92rem; line-height: 1.5; margin-bottom: 0.5rem; }
@@ -91,13 +96,9 @@
 
   .subsection-label { font-size: 0.7rem; letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 0; padding-bottom: 0.75rem; border-bottom: 0.5px solid var(--border); }
   .subsection-label a { color: var(--amber); }
-  .pub-item { padding: 1.25rem 0; border-bottom: 0.5px solid var(--border); }
-  .pub-title { font-size: 0.9rem; font-weight: 400; line-height: 1.6; margin-bottom: 0.3rem; }
-  .pub-meta { font-size: 0.75rem; color: var(--muted); margin-bottom: 0.4rem; }
-  .pub-link { font-size: 0.72rem; color: var(--amber); letter-spacing: 0.06em; }
 
   .awards-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); }
-  .award-card { background: var(--dark); padding: 1.75rem; transition: background 0.2s; }
+  .award-card { background: var(--dark); padding: 1.75rem; transition: background 0.2s; overflow: hidden; }
   .award-card:hover { background: var(--dark2); }
   .award-year { font-size: 0.68rem; letter-spacing: 0.14em; color: var(--amber); margin-bottom: 0.5rem; }
   .award-title { font-size: 0.88rem; font-weight: 500; line-height: 1.5; margin-bottom: 0.5rem; }
@@ -119,6 +120,30 @@
 
   footer { padding: 2rem 3rem; display: flex; justify-content: space-between; align-items: center; font-size: 0.72rem; color: var(--muted); letter-spacing: 0.06em; }
 
+  .proj-box-img { width: 100%; height: 180px; object-fit: cover; border-radius: 2px; margin-bottom: 1.25rem; display: block; transition: transform 0.4s ease; }
+  .proj-box:hover .proj-box-img { transform: scale(1.04); }
+  .award-card-img { width: 100%; height: 160px; object-fit: cover; border-radius: 2px; margin-bottom: 1rem; display: block; transition: transform 0.4s ease; }
+  .award-card:hover .award-card-img { transform: scale(1.04); }
+
+  /* Mobile hero parallax */
+  @media (max-width: 768px) {
+    .hero-right-bg img { position: absolute; top: 0; left: 0; width: 100%; height: 130%; object-fit: cover; object-position: center top; will-change: transform; }
+  }
+
+  /* SIDE QUESTS */
+  .sq-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+  .sq-card { position: relative; overflow: hidden; border-radius: 2px; aspect-ratio: 4/3; background: var(--dark2); }
+  .sq-card img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.4s ease; }
+  .sq-card:hover img { transform: scale(1.04); }
+  .sq-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(26,22,16,0.88) 0%, transparent 55%); }
+  .sq-caption { position: absolute; bottom: 0; left: 0; right: 0; padding: 1.25rem; }
+  .sq-caption-tag { font-size: 0.65rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--amber-light); margin-bottom: 0.3rem; text-shadow: 0 1px 6px rgba(0,0,0,0.9); }
+  .sq-caption-text { font-family: 'Playfair Display', serif; font-style: italic; font-size: 0.88rem; color: var(--cream); line-height: 1.5; }
+  .sq-text-card { border: 0.5px solid var(--border); border-radius: 2px; padding: 1.75rem; display: flex; flex-direction: column; justify-content: center; gap: 1.5rem; }
+  .sq-text-item { display: flex; flex-direction: column; gap: 0.3rem; }
+  .sq-text-label { font-size: 0.65rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--amber); }
+  .sq-text-val { font-size: 0.88rem; color: rgba(255,248,231,0.75); line-height: 1.6; }
+
   @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
   .hero-left > * { animation: fadeUp 0.7s ease both; }
   .hero-left > *:nth-child(1) { animation-delay: 0.1s; }
@@ -127,7 +152,22 @@
 
   @media (max-width: 768px) {
     nav { padding: 1rem 1.5rem; }
-    .nav-links { gap: 1.2rem; }
+    .nav-toggle { display: flex; }
+    .nav-links {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0; right: 0;
+      flex-direction: column;
+      gap: 0;
+      background: rgba(26,22,16,0.98);
+      border-bottom: 0.5px solid var(--border);
+      padding: 0.5rem 0;
+    }
+    .nav-links.open { display: flex; }
+    .nav-links a { padding: 0.85rem 1.5rem; font-size: 0.8rem; color: var(--cream); border-bottom: 0.5px solid var(--border); }
+    .nav-links a:last-child { border-bottom: none; }
+
     .hero { grid-template-columns: 1fr; }
     .hero-left, .hero-right { padding: 3rem 1.5rem; }
     .hero-right { border-top: 0.5px solid var(--border); }
@@ -135,11 +175,13 @@
     .about-grid, .skills-grid, .contact-inner, .card-grid-2 { grid-template-columns: 1fr; gap: 2rem; }
     .proj-boxes-3 { grid-template-columns: 1fr; }
     .awards-grid { grid-template-columns: 1fr; }
-    .timeline::before { left: 5px; transform: none; }
-    .tl-item.on-right, .tl-item.on-left { grid-template-columns: 16px 1fr; }
-    .tl-item.on-right .tl-col-a, .tl-item.on-left .tl-col-b { display: none; }
-    .tl-item.on-right .tl-col-b, .tl-item.on-left .tl-col-a { visibility: visible; text-align: left; padding-left: 1.25rem; padding-right: 0; }
-    .tl-item.on-left .tl-col-a { grid-column: 2; }
+
+    .timeline::before { left: 5px; }
+
+    .sq-grid { grid-template-columns: 1fr; }
+    .sq-card { aspect-ratio: 16/9; }
+    .sq-text-card { min-height: auto; padding: 1.5rem; }
+
     footer { flex-direction: column; gap: 0.5rem; text-align: center; }
   }
 </style>
@@ -148,14 +190,30 @@
 
 <nav>
   <span class="nav-name">Guada Babilonia</span>
-  <div class="nav-links">
-    <a href="#about">About</a>
-    <a href="#experience">Experience</a>
-    <a href="#education">Education</a>
-    <a href="#projects">Research</a>
-    <a href="#contact">Contact</a>
+  <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+  <div class="nav-links" id="navLinks">
+    <a href="#about" onclick="closeNav()">About</a>
+    <a href="#experience" onclick="closeNav()">Experience</a>
+    <a href="#education" onclick="closeNav()">Education</a>
+    <a href="#projects" onclick="closeNav()">Research</a>
+    <a href="#sidequests" onclick="closeNav()">Side Quests</a>
+    <a href="#contact" onclick="closeNav()">Contact</a>
   </div>
 </nav>
+<script>
+  const toggle = document.getElementById('navToggle');
+  const links = document.getElementById('navLinks');
+  toggle.addEventListener('click', () => {
+    toggle.classList.toggle('open');
+    links.classList.toggle('open');
+  });
+  function closeNav() {
+    toggle.classList.remove('open');
+    links.classList.remove('open');
+  }
+</script>
 
 <div class="hero">
   <div class="hero-left">
@@ -167,6 +225,7 @@
     </div>
   </div>
   <div class="hero-right">
+    <div class="hero-right-bg"><img src="hero.JPG" alt="Guada overlooking a misty mountain landscape in Leyte"></div>
     <div class="hero-stats">
       <div>
         <div class="stat-num">10+</div>
@@ -181,7 +240,7 @@
         <div class="stat-label">Peer-reviewed publications</div>
       </div>
       <div>
-        <div class="stat-num">4</div>
+        <div class="stat-num">5</div>
         <div class="stat-label">Countries of research exposure</div>
       </div>
     </div>
@@ -199,8 +258,8 @@
       <div>
         <div class="about-bio">
           <p>I've spent most of my career somewhere between a rice field and a spreadsheet. My work sits at the intersection of rural development, agrifood systems, and climate adaptation, mostly in the Philippines and Southeast Asia, with a recent detour into the Mekong Delta for my master's research.</p>
-          <p>I finished my Erasmus Mundus dual degree magna cum laude as a VLIR-UOS scholar, which still surprises me a little. My dissertation looked at how women in rice-shrimp farming communities in Vietnam make sense of food security when saltwater starts creeping into their fields. That work ended up winning the UGent Future Proef Award.</p>
-          <p>I'm comfortable writing for academic journals and just as comfortable sitting in a FGD with farmers in Leyte. Honestly, I prefer the latter.</p>
+          <p>I finished my Erasmus Mundus degree magna cum laude as a VLIR-UOS scholar, which still surprises me a little. My dissertation looked at how households in rice-shrimp farming communities in Vietnam make sense of food security when saltwater slowly creeps into their fields. That work ended up winning the UGent Future Proef Award.</p>
+          <p>I'm comfortable writing for academia and just as comfortable sitting in a FGD with farmers and fishers in Leyte. Honestly, I prefer the latter.</p>
         </div>
         <div class="chips">
           <span class="chip">Value Chain Analysis</span>
@@ -216,7 +275,7 @@
       <div class="about-details">
         <div class="detail-row">
           <span class="detail-label">Languages</span>
-          <span class="detail-val">English (IELTS 8 / C1) · Filipino · Cebuano · Waray · Spanish (A2) · Dutch (A1)</span>
+          <span class="detail-val">English (IELTS Band 8) · Visayan / Cebuano · Waray · Filipino · Spanish (A2) · Dutch (A1)</span>
         </div>
         <div class="detail-row">
           <span class="detail-label">Regional focus</span>
@@ -243,65 +302,47 @@
     </div>
     <div class="timeline">
 
-      <div class="tl-item on-right">
-        <div class="tl-col-a"></div>
-        <div class="tl-center"><div class="tl-dot"></div></div>
-        <div class="tl-col-b">
-          <div class="tl-role">Independent Consultant</div>
-          <div class="tl-org">KEA Management Consultancy Services, Philippines</div>
-          <div class="tl-date">Jun 2025 – present</div>
-        </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-role">Independent Consultant</div>
+        <div class="tl-org">KEA Management Consultancy Services, Philippines</div>
+        <div class="tl-date">Jun 2025 – present</div>
       </div>
 
-      <div class="tl-item on-left">
-        <div class="tl-col-a">
-          <div class="tl-role">Master's Dissertation Researcher</div>
-          <div class="tl-org">Mekong Institute</div>
-          <div class="tl-sub">formerly Mekong Delta Development Research Institute, Vietnam</div>
-          <div class="tl-date">Jan 2024 – Aug 2025</div>
-        </div>
-        <div class="tl-center"><div class="tl-dot"></div></div>
-        <div class="tl-col-b"></div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-role">Master's Dissertation Researcher</div>
+        <div class="tl-org"><a href="https://mekong.ctu.edu.vn/en/" target="_blank" rel="noopener noreferrer">Mekong Institute</a></div>
+        <div class="tl-sub">formerly Mekong Delta Development Research Institute, Vietnam</div>
+        <div class="tl-date">Jan 2024 – Aug 2025</div>
       </div>
 
-      <div class="tl-item on-right">
-        <div class="tl-col-a"></div>
-        <div class="tl-center"><div class="tl-dot"></div></div>
-        <div class="tl-col-b">
-          <div class="tl-role">Provincial Project Coordinator</div>
-          <div class="tl-org">RAPID Growth Project · Department of Trade and Industry, Southern Leyte, Philippines</div>
-          <div class="tl-date">Jan 2020 – Aug 2023</div>
-        </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-role">Provincial Project Coordinator</div>
+        <div class="tl-org"><a href="https://www.dti.gov.ph/dti-foreign-assisted-projects/dti-msmes/dti-rural-agro-industrial-partnership-inclusive-development-growth-rapid-growth" target="_blank" rel="noopener noreferrer">RAPID Growth Project · Department of Trade and Industry, Southern Leyte, Philippines</a></div>
+        <div class="tl-date">Jan 2020 – Aug 2023</div>
       </div>
 
-      <div class="tl-item on-left">
-        <div class="tl-col-a">
-          <div class="tl-role">Research Assistant</div>
-          <div class="tl-org">International Potato Center (CIP), Philippines</div>
-          <div class="tl-date">Aug 2016 – Jul 2019</div>
-        </div>
-        <div class="tl-center"><div class="tl-dot"></div></div>
-        <div class="tl-col-b"></div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-role">Research Assistant</div>
+        <div class="tl-org"><a href="https://cipotato.org/" target="_blank" rel="noopener noreferrer">International Potato Center (CIP), Philippines</a></div>
+        <div class="tl-date">Aug 2016 – Jul 2019</div>
       </div>
 
-      <div class="tl-item on-right">
-        <div class="tl-col-a"></div>
-        <div class="tl-center"><div class="tl-dot"></div></div>
-        <div class="tl-col-b">
-          <div class="tl-role">Science Research Assistant</div>
-          <div class="tl-org">Philippine Root Crop Research and Training Center, Philippines</div>
-          <div class="tl-date">Jun 2014 – Jul 2016</div>
-        </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-role">Science Research Assistant</div>
+        <div class="tl-org"><a href="https://philrootcrops.vsu.edu.ph/" target="_blank" rel="noopener noreferrer">Philippine Root Crop Research and Training Center, Philippines</a></div>
+        <div class="tl-date">Jun 2014 – Jul 2016</div>
       </div>
 
-      <div class="tl-item on-left">
-        <div class="tl-col-a">
-          <div class="tl-role">Undergraduate Research Assistant</div>
-          <div class="tl-org">WorldFish · Visayas State University, Philippines</div>
-          <div class="tl-date">Dec 2013 – Mar 2014</div>
-        </div>
-        <div class="tl-center"><div class="tl-dot"></div></div>
-        <div class="tl-col-b"></div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-role">Undergraduate Research Assistant</div>
+        <div class="tl-org"><a href="https://worldfishcenter.org/" target="_blank" rel="noopener noreferrer">WorldFish</a> · <a href="https://www.vsu.edu.ph/" target="_blank" rel="noopener noreferrer">Visayas State University, Philippines</a></div>
+        <div class="tl-date">Dec 2013 – Mar 2014</div>
       </div>
 
     </div>
@@ -317,25 +358,25 @@
     <div class="card-grid-2">
       <div class="proj-box">
         <div class="proj-box-tag">Master's Degree</div>
-        <div class="proj-box-title">International Master of Science in Rural Development</div>
+        <div class="proj-box-title"><a href="https://imrd.eu/" target="_blank" rel="noopener noreferrer">International Master of Science in Rural Development</a></div>
         <div class="proj-box-meta">Ghent University · Universidad de Cordoba · Universita di Pisa · Can Tho University · 2023–2025<br><br>Thesis: Gendered perceptions of food security in rice-shrimp farming systems under salinity intrusion in Vietnam. Specialization: Natural resources and territorial studies. Minor: Rural livelihoods.</div>
         <span class="proj-box-badge">Magna cum laude · VLIR-UOS Scholar</span>
       </div>
       <div class="proj-box">
         <div class="proj-box-tag">Master's Degree</div>
-        <div class="proj-box-title">Master Universitario en Desarrollo Rural</div>
+        <div class="proj-box-title"><a href="http://www.uco.es/internacional/extranjeros/en/" target="_blank" rel="noopener noreferrer">Master Universitario en Desarrollo Rural</a></div>
         <div class="proj-box-meta">Universidad de Cordoba, Spain · 2023–2025<br><br>Dual degree pursued alongside the Erasmus Mundus IMRD programme.</div>
         <span class="proj-box-badge">Diploma pending</span>
       </div>
       <div class="proj-box">
         <div class="proj-box-tag">Bachelor's Degree</div>
-        <div class="proj-box-title">Bachelor of Science in Agribusiness</div>
-        <div class="proj-box-meta">Visayas State University, Philippines · 2010–2014<br><br>Thesis: Green value chain analysis of karlang (Xanthosoma sagittifolium) in selected AAS communities in Sogod, Southern Leyte. Finalist, Phi Delta Outstanding Thesis in Economics and Business.</div>
+        <div class="proj-box-title"><a href="https://www.vsu.edu.ph/undergraduate-degree-programs/1992-bs-in-agribusiness-information" target="_blank" rel="noopener noreferrer">Bachelor of Science in Agribusiness</a></div>
+        <div class="proj-box-meta">Visayas State University, Philippines · 2010–2014<br><br>Thesis: Green value chain analysis of karlang (<em>Xanthosoma sagittifolium</em>) in selected AAS communities in Sogod, Southern Leyte. Finalist, Phi Delta Outstanding Thesis in Economics and Business.</div>
         <span class="proj-box-badge">Cum laude · Licensed Professional Agriculturist</span>
       </div>
       <div class="proj-box">
         <div class="proj-box-tag">Postgraduate Units</div>
-        <div class="proj-box-title">Land Administration and Management</div>
+        <div class="proj-box-title"><a href="https://www.vsu.edu.ph/vsu/834-ms-lam" target="_blank" rel="noopener noreferrer">Land Administration and Management</a></div>
         <div class="proj-box-meta">Visayas State University, Philippines · 2015–2017 · 12 units<br><br>Land economics, tenure, geodata technologies, demography, and land policy.</div>
       </div>
     </div>
@@ -349,39 +390,36 @@
       <h2 class="section-title">Projects</h2>
     </div>
     <div class="proj-boxes-3">
+      <a href="https://futureproef.gent/thesis/beyond-economics-and-environment-gendered-insights-into-food-security-among-vietnamese-rice-shrimp-farmers/" target="_blank" rel="noopener noreferrer" style="display:block; text-decoration:none; color:inherit;">
       <div class="proj-box">
+        <img src="p1.jpg" alt="Community interview in the Mekong Delta, Vietnam" class="proj-box-img">
         <div class="proj-box-tag">Master's Thesis · 🇻🇳</div>
         <div class="proj-box-title">Gendered perceptions of food security in rice-shrimp farming under salinity intrusion</div>
-        <div class="proj-box-meta">Mekong Delta, 2024–2025. Mixed-methods study on how climate-induced salinity shifts food security for women in rice-shrimp farming communities.</div>
+        <div class="proj-box-meta">Mekong Delta, 2024–2025. Quali-heavy study on how climate-induced salinity shifts food security for men and women in rice-shrimp farming communities.</div>
         <span class="proj-box-badge">Winner, UGent Future Proef Award 2025</span>
       </div>
+      </a>
+      <a href="https://www.giornaledibarga.it/2024/07/cibo-innovazione-sviluppo-rurale-la-garfagnana-ospita-la-summer-school-delluniversita-di-pisa-402498/" target="_blank" rel="noopener noreferrer" style="display:block; text-decoration:none; color:inherit;">
       <div class="proj-box">
+        <img src="p2.jpg" alt="Seminar at a vineyard during the Tuscany Summer School" class="proj-box-img">
         <div class="proj-box-tag">Summer School · 🇮🇹</div>
         <div class="proj-box-title">Food and Innovation in Rural Transition: the Tuscany Case</div>
         <div class="proj-box-meta">Universita di Pisa · Jun–Jul 2024 · 10 ECTS. Immersive field experience on agricultural innovation and rural transition in the Tuscan territory.</div>
       </div>
+      </a>
+      <a href="https://doi.org/10.61569/k1q6d477" target="_blank" rel="noopener noreferrer" style="display:block; text-decoration:none; color:inherit;">
       <div class="proj-box">
+        <img src="p3.JPG" alt="Haulers preparing sacks of cocoyam for sea transport" class="proj-box-img">
         <div class="proj-box-tag">Undergraduate Research · 🇵🇭</div>
         <div class="proj-box-title">Value chain analysis of cocoyam in aquatic agricultural systems</div>
-        <div class="proj-box-meta">Visayas, 2013–2014. Mapped cocoyam (Xanthosoma sagittifolium) production and trade across multiple Visayas sites under WorldFish's Aquatic Agricultural Systems program.</div>
+        <div class="proj-box-meta">Visayas, 2013–2014. Mapped cocoyam (<em>X. sagittifolium</em>) production, processing, and trade across multiple Visayas sites under WorldFish's Aquatic Agricultural Systems program.</div>
+        <span class="proj-box-badge">Finalist, VSU Phi Delta Outstanding Thesis in Economics and Business 2014</span>
       </div>
+      </a>
     </div>
 
-    <div class="subsection-label">Publications</div>
-    <div class="pub-item">
-      <div class="pub-title">Policy landscape and investment prioritization in Philippine farming system research and extension</div>
-      <div class="pub-meta">Sarabi, M.S., <strong>Babilonia, G.</strong>, &amp; Nguyen, T.B. · 3rd International Korkut Ata Scientific Research Conference, Vol. 2, pp. 314–323 · 2024</div>
-      <a class="pub-link" href="https://www.researchgate.net/publication/388230967" target="_blank">View on ResearchGate</a>
-    </div>
-    <div class="pub-item">
-      <div class="pub-title">Value chain analysis for karlang (Xanthosoma sagittifolium) in selected aquatic and agricultural systems communities in Sogod, Southern Leyte, Philippines</div>
-      <div class="pub-meta">Abamo, A., <strong>Babilonia, G.</strong>, &amp; Cavite, H.J. · Journal of Educational and Human Resource Development, 8, 94–110 · 2020</div>
-      <a class="pub-link" href="https://doi.org/10.61569/k1q6d477" target="_blank">DOI: 10.61569/k1q6d477</a>
-    </div>
-    <div class="pub-item">
-      <div class="pub-title">Farmer Business Schools in Bohol: A gender assessment</div>
-      <div class="pub-meta">Kawarazuka, N., Teruel, R.T., &amp; <strong>Babilonia, G.</strong> · International Potato Center · 2019</div>
-      <a class="pub-link" href="https://doi.org/10.4160/9789290605317" target="_blank">DOI: 10.4160/9789290605317</a>
+    <div class="subsection-label">
+      <a href="https://orcid.org/0009-0009-4134-3070" target="_blank" rel="noopener noreferrer">Publications (view on ORCiD)</a>
     </div>
     <div class="subsection-label" style="margin-top: 3rem;">Research and Technical Skills</div>
     <div class="skills-grid" style="margin-top: 1.5rem;">
@@ -411,7 +449,7 @@
       <div>
         <div class="skill-group-label">Communication and outreach</div>
         <ul class="skill-list">
-          <li>Art-science communication ("Silent Spread" board game)</li>
+          <li>Art-science communication</li>
           <li>Training material and extension output development</li>
           <li>Policy briefs for non-academic audiences</li>
           <li>Farmer Business School facilitation</li>
@@ -438,26 +476,36 @@
       <h2 class="section-title">Milestones</h2>
     </div>
     <div class="awards-grid">
+      <a href="https://www.vlaanderen.be/future-proef-award/eindproeven-future-proef-award-genomineerden-finalisten-en-winnaars/genomineerde-masterproeven-2026" target="_blank" rel="noopener noreferrer" style="display:block; text-decoration:none; color:inherit;">
       <div class="award-card">
+        <img src="m1.JPG" alt="UGent Future Proef Award ceremony at Stadhuis Gent" class="award-card-img">
         <div class="award-year">2026</div>
         <div class="award-title">Official Nominee, Flemish Future Proef Award</div>
         <div class="award-org">After my thesis won the UGent Future Proef Award, I became Ghent University's official nominee for the Flemish-level competition, which recognizes the best master's dissertation for sustainability across HEIs in Flanders.</div>
       </div>
+      </a>
+      <a href="https://youth.world-food-forum.org/education/agx-fair/en" target="_blank" rel="noopener noreferrer" style="display:block; text-decoration:none; color:inherit;">
       <div class="award-card">
-        <div class="award-year">2025</div>
+          <img src="m2.jpg" alt="FAO AgX Fair finalists with certificates in Rome" class="award-card-img">
+          <div class="award-year">2025</div>
         <div class="award-title">Finalist (Europe and Central Asia), FAO AgX Fair</div>
-        <div class="award-org">One of six finalists selected from 160 submissions worldwide. My team received a regional award for "Silent Spread," a digital board game we built around invasive pathogen management in Spanish oak forests.</div>
+        <div class="award-org">One of six finalists selected from 160 submissions worldwide. Our team received official representation for "Silent Spread," a digital board game we built around invasive pathogen management in Spanish dehesa systems.</div>
       </div>
+      </a>
+      <a href="https://www.ugent.be/bw/nl/faculteit/raden/cwo" target="_blank" rel="noopener noreferrer" style="display:block; text-decoration:none; color:inherit;">
       <div class="award-card">
         <div class="award-year">2025</div>
         <div class="award-title">CWO Research Grant</div>
         <div class="award-org">Received a travel grant from Ghent University's Commission for Scientific Research to cover fieldwork expenses for my master's dissertation in Vietnam.</div>
       </div>
+      </a>
+      <a href="https://www.vliruos.be/get-funded/study-scholarships" target="_blank" rel="noopener noreferrer" style="display:block; text-decoration:none; color:inherit;">
       <div class="award-card">
         <div class="award-year">2023</div>
         <div class="award-title">VLIR-UOS Masters Scholarship</div>
         <div class="award-org">Selected for a full scholarship under the Flemish Interuniversity Council's ICP-Connect programme to pursue the Erasmus Mundus IMRD (2023–2025).</div>
       </div>
+      </a>
       <div class="award-card">
         <div class="award-year">2017</div>
         <div class="award-title">Best Ongoing Paper for Development</div>
@@ -467,12 +515,62 @@
   </div>
 </section>
 
+<section id="sidequests">
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="section-num">06</span>
+      <h2 class="section-title">Side Quests</h2>
+    </div>
+    <div class="sq-grid">
+
+      <div class="sq-text-card">
+        <div class="sq-text-item">
+          <div class="sq-text-label">Languages in progress</div>
+          <div class="sq-text-val">Learning Dutch and Spanish on Duolingo. Slowly. Stubbornly. Both feel like unlocking another way of thinking about the world.</div>
+        </div>
+        <div class="sq-text-item">
+          <div class="sq-text-label">Currently reading</div>
+          <div class="sq-text-val">Sunrise on the reaping by S. Collins, Magnifica Humanitas by Pope Leo XIV, anything that makes me ponder.</div>
+        </div>
+      </div>
+
+      <div class="sq-card">
+        <img src="s1.JPG" alt="Mì Quảng, a Vietnamese noodle dish">
+        <div class="sq-overlay"></div>
+        <div class="sq-caption">
+          <div class="sq-caption-tag">Food</div>
+          <div class="sq-caption-text">Bánh mì, batchoy, paella: food is how I connect with a place. I cook, I share, I ask.</div>
+        </div>
+      </div>
+
+      <div class="sq-card">
+        <img src="s3.png" alt="Guada and friends at a Adalusian meadow">
+        <div class="sq-overlay"></div>
+        <div class="sq-caption">
+          <div class="sq-caption-tag">The best conversations</div>
+          <div class="sq-caption-text">...happen around food. That's also why I ended up studying agrifood systems.</div>
+        </div>
+      </div>
+
+      <div class="sq-card">
+        <img src="s2.jpg" alt="Sunset view from Tan-awan peak overlooking the sea">
+        <div class="sq-overlay"></div>
+        <div class="sq-caption">
+          <div class="sq-caption-tag">Home</div>
+          <div class="sq-caption-text">I grew up between a mountain and the sea. I carry that landscape wherever I go.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
 <section id="contact" style="border-bottom: none;">
   <div class="contact-inner">
     <h2 class="contact-heading">Let's build something<br><em>together.</em></h2>
     <div>
       <div class="contact-icons">
-        <a class="contact-icon-link" href="mailto:gbabilonia@proton.me" title="Email">
+        <a class="contact-icon-link" href="mailto:githubpage.generic345@passinbox.com" title="Email">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg>
           <span class="contact-icon-label">Email</span>
         </a>
@@ -494,5 +592,31 @@
   <span>Baybay City, Leyte, Philippines</span>
 </footer>
 
+<div style="text-align: center; padding: 1rem 2rem 1.5rem; font-size: 0.68rem; color: var(--muted); line-height: 1.8; border-top: 0.5px solid var(--border);">
+  <strong style="letter-spacing: 0.08em; text-transform: uppercase; font-size: 0.62rem;">Photo credits</strong><br>
+  Future Proef ceremony · <a href="https://agecon.ugent.be/joost-dessein/" target="_blank" rel="noopener noreferrer" style="color: var(--muted); text-decoration: underline; text-underline-offset: 2px;">Joost Dessein</a> |
+  FAO AgX Fair team photo & The best conversations · <a href="https://agecon.ugent.be/research/agri/charl-darapisa/" target="_blank" rel="noopener noreferrer" style="color: var(--muted); text-decoration: underline; text-underline-offset: 2px;">Charl Justine Darapisa</a> |
+  Summer school photos · <a href="https://www.researchgate.net/profile/Brigida-Marovelli-2" target="_blank" rel="noopener noreferrer" style="color: var(--muted); text-decoration: underline; text-underline-offset: 2px;">Brigida Marovelli</a>
+</div>
+
+<script>
+  // Mobile hero parallax: image drifts top-to-bottom as you scroll down
+  (function() {
+    const heroBg = document.querySelector('.hero-right-bg img');
+    if (!heroBg) return;
+    function applyParallax() {
+      if (window.innerWidth > 768) { heroBg.style.transform = ''; return; }
+      const heroRight = document.querySelector('.hero-right');
+      if (!heroRight) return;
+      const rect = heroRight.getBoundingClientRect();
+      const progress = Math.max(0, Math.min(1, -rect.top / rect.height));
+      const shift = progress * 20; // px shift downward
+      heroBg.style.transform = 'translateY(' + shift + 'px)';
+    }
+    window.addEventListener('scroll', applyParallax, { passive: true });
+    window.addEventListener('resize', applyParallax);
+    applyParallax();
+  })();
+</script>
 </body>
 </html>
