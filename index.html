@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Guada Babilonia</title>
+<meta name="description" content="Portfolio of Guada Babilonia — rural development professional and researcher in agrifood systems and climate adaptation.">
+<meta name="keywords" content="Guada Marie Petallana Babilonia, climate resilience, researcher, gender studies, rural development, agrifood systems, Philippines">
+<meta name="author" content="Guada Marie Babilonia">
 <link rel="icon" type="image/png" href="tabicon_nb.png">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
@@ -28,7 +31,8 @@
   .nav-links a { font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); transition: color 0.2s; }
   .nav-links a:hover { color: var(--cream); }
   .nav-toggle { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; }
-  .nav-toggle span { display: block; width: 22px; height: 1.5px; background: var(--cream); transition: all 0.3s; }
+  .nav-toggle span { display: block; width: 22px; height: 2px; background: var(--amber); transition: all 0.3s; }
+  .nav-toggle.open span { background: var(--amber-light); }
   .nav-toggle.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
   .nav-toggle.open span:nth-child(2) { opacity: 0; }
   .nav-toggle.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
@@ -120,15 +124,15 @@
 
   footer { padding: 2rem 3rem; display: flex; justify-content: space-between; align-items: center; font-size: 0.72rem; color: var(--muted); letter-spacing: 0.06em; }
 
+  /* scroll offset so section titles don't hide behind nav */
+  section, #sidequests { scroll-margin-top: 80px; }
+
   .proj-box-img { width: 100%; height: 180px; object-fit: cover; border-radius: 2px; margin-bottom: 1.25rem; display: block; transition: transform 0.4s ease; }
   .proj-box:hover .proj-box-img { transform: scale(1.04); }
   .award-card-img { width: 100%; height: 160px; object-fit: cover; border-radius: 2px; margin-bottom: 1rem; display: block; transition: transform 0.4s ease; }
   .award-card:hover .award-card-img { transform: scale(1.04); }
 
-  /* Mobile hero parallax */
-  @media (max-width: 768px) {
-    .hero-right-bg img { position: absolute; top: 0; left: 0; width: 100%; height: 130%; object-fit: cover; object-position: center top; will-change: transform; }
-  }
+  /* Mobile hero parallax — handled in main media query below */
 
   /* SIDE QUESTS */
   .sq-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
@@ -137,8 +141,12 @@
   .sq-card:hover img { transform: scale(1.04); }
   .sq-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(26,22,16,0.88) 0%, transparent 55%); }
   .sq-caption { position: absolute; bottom: 0; left: 0; right: 0; padding: 1.25rem; }
-  .sq-caption-tag { font-size: 0.65rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--amber-light); margin-bottom: 0.3rem; text-shadow: 0 1px 6px rgba(0,0,0,0.9); }
-  .sq-caption-text { font-family: 'Playfair Display', serif; font-style: italic; font-size: 0.88rem; color: var(--cream); line-height: 1.5; }
+  .subsection-label { font-size: 0.7rem; letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 0; padding-bottom: 0.75rem; border-bottom: 0.5px solid var(--border); color: var(--muted); transition: color 0.2s; cursor: default; }
+  .subsection-label a { color: var(--muted); transition: color 0.2s; text-decoration: none; }
+  .subsection-label:hover, .subsection-label a:hover { color: var(--amber); }
+
+  .sq-caption-tag { font-size: 0.65rem; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,248,231,0.9); margin-bottom: 0.3rem; }
+  .sq-caption-text { font-size: 0.88rem; color: var(--cream); line-height: 1.5; font-weight: 400; }
   .sq-text-card { border: 0.5px solid var(--border); border-radius: 2px; padding: 1.75rem; display: flex; flex-direction: column; justify-content: center; gap: 1.5rem; }
   .sq-text-item { display: flex; flex-direction: column; gap: 0.3rem; }
   .sq-text-label { font-size: 0.65rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--amber); }
@@ -168,9 +176,11 @@
     .nav-links a { padding: 0.85rem 1.5rem; font-size: 0.8rem; color: var(--cream); border-bottom: 0.5px solid var(--border); }
     .nav-links a:last-child { border-bottom: none; }
 
-    .hero { grid-template-columns: 1fr; }
-    .hero-left, .hero-right { padding: 3rem 1.5rem; }
-    .hero-right { border-top: 0.5px solid var(--border); }
+    .hero { grid-template-columns: 1fr; min-height: auto; }
+    .hero-left { padding: 4rem 1.5rem 3rem; min-height: 60vh; }
+    .hero-right { min-height: 70vw; border-top: 0.5px solid var(--border); padding: 2rem 1.5rem; }
+    .hero-right-bg { position: absolute; inset: 0; overflow: hidden; }
+    .hero-right-bg img { position: absolute; top: 0; left: 0; width: 100%; height: 150%; object-fit: cover; object-position: center top; will-change: transform; }
     .section-inner, .contact-inner { padding: 3rem 1.5rem; }
     .about-grid, .skills-grid, .contact-inner, .card-grid-2 { grid-template-columns: 1fr; gap: 2rem; }
     .proj-boxes-3 { grid-template-columns: 1fr; }
@@ -198,6 +208,7 @@
     <a href="#experience" onclick="closeNav()">Experience</a>
     <a href="#education" onclick="closeNav()">Education</a>
     <a href="#projects" onclick="closeNav()">Research</a>
+    <a href="#milestones" onclick="closeNav()">Milestones</a>
     <a href="#sidequests" onclick="closeNav()">Side Quests</a>
     <a href="#contact" onclick="closeNav()">Contact</a>
   </div>
@@ -220,7 +231,7 @@
     <div class="hero-tag">Rural Development · Agrifood Systems · Climate Resilience</div>
     <h1 class="hero-name"><span class="first">Guada Babilonia</span><br><span class="last" style="font-size: 0.55em; letter-spacing: 0.04em;">MSc</span></h1>
     <div class="hero-btns">
-      <a href="#experience" class="btn btn-primary">View my work</a>
+      <a href="#projects" class="btn btn-primary">View my work</a>
       <a href="#contact" class="btn btn-outline">Get in touch</a>
     </div>
   </div>
@@ -429,9 +440,10 @@
           <li>Mixed-methods research design</li>
           <li>Participatory action research (PAR)</li>
           <li>Constructivist grounded theory (CGT)</li>
-          <li>Value chain analysis (VCA)</li>
+          <li>Value chain analysis and development (VCA/D)</li>
           <li>SES framework (Ostrom)</li>
           <li>Photovoice · Theory of Change</li>
+          <li>Co-creation processes</li>
           <li>Stakeholder and gender analysis</li>
         </ul>
       </div>
@@ -443,14 +455,18 @@
           <li>Household surveys</li>
           <li>Participatory mapping</li>
           <li>Multi-stakeholder platforms</li>
-          <li>Co-creation processes</li>
+          <li>Stakeholder workshops</li>
         </ul>
       </div>
       <div>
-        <div class="skill-group-label">Communication and outreach</div>
+        <div class="skill-group-label">Coordination and outreach</div>
         <ul class="skill-list">
+          <li>Project cycle management (PCM)</li>
+          <li>Multi-stakeholder facilitation</li>
+          <li>M&amp;E framework design and reporting</li>
+          <li>Budget planning and fund utilization</li>
           <li>Art-science communication</li>
-          <li>Training material and extension output development</li>
+          <li>Training material and extension development</li>
           <li>Policy briefs for non-academic audiences</li>
           <li>Farmer Business School facilitation</li>
         </ul>
@@ -469,7 +485,7 @@
   </div>
 </section>
 
-<section>
+<section id="milestones">
   <div class="section-inner">
     <div class="section-header">
       <span class="section-num">05</span>
@@ -526,7 +542,7 @@
       <div class="sq-text-card">
         <div class="sq-text-item">
           <div class="sq-text-label">Languages in progress</div>
-          <div class="sq-text-val">Learning Dutch and Spanish on Duolingo. Slowly. Stubbornly. Both feel like unlocking another way of thinking about the world.</div>
+          <div class="sq-text-val">Learning Dutch and Spanish on Duolingo. Slowly. Stubbornly. Also picking up R — a language, too, just a different kind. All three feel like unlocking another way of thinking about the world.</div>
         </div>
         <div class="sq-text-item">
           <div class="sq-text-label">Currently reading</div>
@@ -561,6 +577,15 @@
         </div>
       </div>
 
+      <div class="sq-card">
+        <img src="s4.JPG" alt="Night Sky at Refugio Isera">
+        <div class="sq-overlay"></div>
+        <div class="sq-caption">
+          <div class="sq-caption-tag">Volunteering</div>
+          <div class="sq-caption-text">Whether it's on a farm or refugio, I try to give back whenever I can.</div>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
@@ -588,8 +613,8 @@
 </section>
 
 <footer>
-  <span>© 2026 Guada Babilonia</span>
-  <span>Baybay City, Leyte, Philippines</span>
+  <span>© 2026 Guada Marie Babilonia</span>
+  <span>Baybay City, Philippines</span>
 </footer>
 
 <div style="text-align: center; padding: 1rem 2rem 1.5rem; font-size: 0.68rem; color: var(--muted); line-height: 1.8; border-top: 0.5px solid var(--border);">
@@ -600,7 +625,7 @@
 </div>
 
 <script>
-  // Mobile hero parallax: image drifts top-to-bottom as you scroll down
+  // Mobile hero: page travels over the full top-to-bottom length of the photo
   (function() {
     const heroBg = document.querySelector('.hero-right-bg img');
     if (!heroBg) return;
@@ -609,9 +634,14 @@
       const heroRight = document.querySelector('.hero-right');
       if (!heroRight) return;
       const rect = heroRight.getBoundingClientRect();
-      const progress = Math.max(0, Math.min(1, -rect.top / rect.height));
-      const shift = progress * 20; // px shift downward
-      heroBg.style.transform = 'translateY(' + shift + 'px)';
+      const viewH = window.innerHeight;
+      // progress: 0 when top of section is at bottom of viewport, 1 when bottom of section is at top
+      const total = rect.height + viewH;
+      const elapsed = viewH - rect.top;
+      const progress = Math.max(0, Math.min(1, elapsed / total));
+      // image is 150% tall; shift it from 0% to -33% as user scrolls through
+      const shift = progress * -33;
+      heroBg.style.transform = 'translateY(' + shift + '%)';
     }
     window.addEventListener('scroll', applyParallax, { passive: true });
     window.addEventListener('resize', applyParallax);
