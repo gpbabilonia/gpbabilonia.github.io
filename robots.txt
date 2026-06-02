@@ -1,4 +1,4 @@
 User-agent: *
 Disallow:
 
-Sitemap: https://github.com/gpbabilonia/gpbabilonia.github.io/blob/main/sitemap.xml
+Sitemap: https://gpbabilonia.github.io/sitemap.xml
