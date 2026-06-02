@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guada Babilonia</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --cream: #fff8e7;
+    --dark: #1a1610;
+    --dark2: #2c2519;
+    --amber: #c8892a;
+    --amber-light: #e8a83a;
+    --muted: #6b5f45;
+    --border: rgba(255,248,231,0.12);
+  }
+  html { scroll-behavior: smooth; }
+  body { background: var(--dark); color: var(--cream); font-family: 'DM Sans', sans-serif; font-weight: 300; line-height: 1.7; overflow-x: hidden; }
+  a { color: inherit; text-decoration: none; }
+
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 1.25rem 3rem; border-bottom: 0.5px solid var(--border); background: rgba(26,22,16,0.92); backdrop-filter: blur(8px); }
+  .nav-name { font-family: 'Playfair Display', serif; font-size: 1rem; letter-spacing: 0.02em; }
+  .nav-links { display: flex; gap: 2rem; }
+  .nav-links a { font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); transition: color 0.2s; }
+  .nav-links a:hover { color: var(--cream); }
+
+  .hero { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; border-bottom: 0.5px solid var(--border); padding-top: 72px; }
+  .hero-left { padding: 5rem 3rem 4rem; border-right: 0.5px solid var(--border); display: flex; flex-direction: column; justify-content: center; }
+  .hero-tag { font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--amber); margin-bottom: 1.5rem; }
+  .hero-name { font-family: 'Playfair Display', serif; font-size: clamp(2.8rem, 5vw, 4.5rem); font-weight: 400; line-height: 1.05; margin-bottom: 1.5rem; }
+  .hero-name em { font-style: italic; color: var(--amber-light); }
+  .hero-tagline { font-size: 0.95rem; color: var(--muted); max-width: 420px; line-height: 1.8; margin-bottom: 2.5rem; }
+  .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn { font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.75rem 1.75rem; border-radius: 2px; transition: all 0.2s; cursor: pointer; display: inline-block; }
+  .btn-primary { background: var(--amber); color: var(--dark); font-weight: 500; }
+  .btn-primary:hover { background: var(--amber-light); }
+  .btn-outline { border: 0.5px solid var(--border); color: var(--cream); }
+  .btn-outline:hover { border-color: var(--cream); }
+
+  .hero-right { padding: 5rem 3rem 4rem; display: flex; flex-direction: column; justify-content: flex-end; }
+  .hero-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 3rem; }
+  .stat-num { font-family: 'Playfair Display', serif; font-size: 2.8rem; font-weight: 400; color: var(--amber-light); line-height: 1; margin-bottom: 0.3rem; }
+  .stat-label { font-size: 0.75rem; color: var(--muted); letter-spacing: 0.08em; line-height: 1.4; }
+  .hero-quote { font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.05rem; color: rgba(255,248,231,0.5); line-height: 1.7; border-left: 1px solid var(--amber); padding-left: 1.25rem; }
+
+  section { border-bottom: 0.5px solid var(--border); }
+  .section-inner { padding: 5rem 3rem; max-width: 1100px; margin: 0 auto; }
+  .section-header { display: flex; align-items: baseline; gap: 1rem; margin-bottom: 3.5rem; }
+  .section-num { font-size: 0.7rem; letter-spacing: 0.15em; color: var(--amber); min-width: 2rem; }
+  .section-title { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 400; }
+
+  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; }
+  .about-bio { font-size: 1rem; color: rgba(255,248,231,0.75); line-height: 1.9; }
+  .about-bio p + p { margin-top: 1rem; }
+  .chips { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 2rem; }
+  .chip { font-size: 0.72rem; letter-spacing: 0.06em; padding: 0.35rem 0.85rem; border: 0.5px solid var(--border); border-radius: 2px; color: var(--muted); }
+  .about-details { display: flex; flex-direction: column; gap: 1.5rem; }
+  .detail-row { display: flex; flex-direction: column; gap: 0.3rem; }
+  .detail-label { font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--amber); }
+  .detail-val { font-size: 0.9rem; color: rgba(255,248,231,0.8); }
+
+  .exp-item { display: grid; grid-template-columns: 200px 1fr; gap: 2rem; padding: 2rem 0; border-top: 0.5px solid var(--border); }
+  .exp-item:last-child { border-bottom: 0.5px solid var(--border); }
+  .exp-date { font-size: 0.78rem; color: var(--muted); padding-top: 0.2rem; }
+  .exp-role { font-weight: 500; font-size: 1rem; margin-bottom: 0.2rem; }
+  .exp-org { font-size: 0.85rem; color: var(--amber); margin-bottom: 0.8rem; }
+  .exp-bullets { list-style: none; }
+  .exp-bullets li { font-size: 0.88rem; color: rgba(255,248,231,0.65); padding: 0.25rem 0; padding-left: 1rem; position: relative; line-height: 1.6; }
+  .exp-bullets li::before { content: '—'; position: absolute; left: 0; color: var(--amber); font-size: 0.7rem; top: 0.35rem; }
+
+  .edu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+  .edu-card { border: 0.5px solid var(--border); padding: 1.75rem; border-radius: 2px; transition: border-color 0.2s; }
+  .edu-card:hover { border-color: rgba(200,137,42,0.4); }
+  .edu-degree { font-family: 'Playfair Display', serif; font-size: 0.95rem; margin-bottom: 0.4rem; line-height: 1.4; }
+  .edu-inst { font-size: 0.78rem; color: var(--amber); margin-bottom: 0.5rem; }
+  .edu-year { font-size: 0.72rem; color: var(--muted); margin-bottom: 0.75rem; }
+  .edu-note { font-size: 0.8rem; color: rgba(255,248,231,0.55); line-height: 1.6; }
+  .edu-badge { display: inline-block; margin-top: 0.75rem; font-size: 0.68rem; letter-spacing: 0.08em; padding: 0.25rem 0.65rem; background: rgba(200,137,42,0.15); color: var(--amber-light); border-radius: 2px; }
+
+  .pub-item { padding: 1.75rem 0; border-top: 0.5px solid var(--border); }
+  .pub-item:last-child { border-bottom: 0.5px solid var(--border); }
+  .pub-title { font-size: 0.95rem; font-weight: 400; line-height: 1.6; margin-bottom: 0.4rem; }
+  .pub-meta { font-size: 0.78rem; color: var(--muted); margin-bottom: 0.5rem; }
+  .pub-link { font-size: 0.75rem; color: var(--amber); letter-spacing: 0.06em; }
+
+  .awards-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1px; background: var(--border); }
+  .award-card { background: var(--dark); padding: 1.75rem; transition: background 0.2s; }
+  .award-card:hover { background: var(--dark2); }
+  .award-year { font-size: 0.68rem; letter-spacing: 0.14em; color: var(--amber); margin-bottom: 0.5rem; }
+  .award-title { font-size: 0.88rem; font-weight: 400; line-height: 1.5; margin-bottom: 0.3rem; }
+  .award-org { font-size: 0.75rem; color: var(--muted); }
+
+  .skills-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; }
+  .skill-group-label { font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--amber); margin-bottom: 1rem; }
+  .skill-list { list-style: none; }
+  .skill-list li { font-size: 0.88rem; color: rgba(255,248,231,0.7); padding: 0.4rem 0; border-bottom: 0.5px solid var(--border); line-height: 1.5; }
+
+  .contact-inner { padding: 5rem 3rem; max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+  .contact-heading { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 4vw, 3.5rem); font-weight: 400; line-height: 1.1; }
+  .contact-heading em { font-style: italic; color: var(--amber-light); }
+  .contact-links { display: flex; flex-direction: column; gap: 0; }
+  .contact-link { display: flex; align-items: center; gap: 1rem; font-size: 0.88rem; color: rgba(255,248,231,0.65); padding: 1rem 0; border-bottom: 0.5px solid var(--border); transition: color 0.2s; }
+  .contact-link:hover { color: var(--cream); }
+  .contact-link-label { font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--amber); min-width: 70px; }
+
+  footer { padding: 2rem 3rem; display: flex; justify-content: space-between; align-items: center; font-size: 0.72rem; color: var(--muted); letter-spacing: 0.06em; }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+  .hero-left > * { animation: fadeUp 0.7s ease both; }
+  .hero-left > *:nth-child(1) { animation-delay: 0.1s; }
+  .hero-left > *:nth-child(2) { animation-delay: 0.2s; }
+  .hero-left > *:nth-child(3) { animation-delay: 0.3s; }
+  .hero-left > *:nth-child(4) { animation-delay: 0.4s; }
+
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { gap: 1.2rem; }
+    .hero { grid-template-columns: 1fr; }
+    .hero-left, .hero-right { padding: 3rem 1.5rem; }
+    .hero-right { border-top: 0.5px solid var(--border); }
+    .section-inner, .contact-inner { padding: 3rem 1.5rem; }
+    .about-grid, .skills-grid, .contact-inner { grid-template-columns: 1fr; gap: 2rem; }
+    .edu-grid { grid-template-columns: 1fr; }
+    .awards-grid { grid-template-columns: 1fr 1fr; }
+    .exp-item { grid-template-columns: 1fr; gap: 0.5rem; }
+    footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <span class="nav-name">Guada Babilonia</span>
+  <div class="nav-links">
+    <a href="#about">About</a>
+    <a href="#experience">Experience</a>
+    <a href="#education">Education</a>
+    <a href="#publications">Research</a>
+    <a href="#contact">Contact</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-left">
+    <div class="hero-tag">Rural Development · Agrifood Systems · Climate Resilience</div>
+    <h1 class="hero-name">Guada<br><em>Babilonia</em></h1>
+    <p class="hero-tagline">Early-career academic and development professional bridging rigorous research with on-the-ground impact — from the Mekong Delta to the hills of Southern Leyte.</p>
+    <div class="hero-btns">
+      <a href="#experience" class="btn btn-primary">View my work</a>
+      <a href="#contact" class="btn btn-outline">Get in touch</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-stats">
+      <div>
+        <div class="stat-num">10+</div>
+        <div class="stat-label">Years in development practice</div>
+      </div>
+      <div>
+        <div class="stat-num">2,600+</div>
+        <div class="stat-label">Farmers and MSMEs trained</div>
+      </div>
+      <div>
+        <div class="stat-num">3</div>
+        <div class="stat-label">Peer-reviewed publications</div>
+      </div>
+      <div>
+        <div class="stat-num">4</div>
+        <div class="stat-label">Countries of research exposure</div>
+      </div>
+    </div>
+    <p class="hero-quote">Good research tells you what's true. Good strategy tells you what to do about it — and who gets left out if you don't.</p>
+  </div>
+</div>
+
+<section id="about">
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="section-num">01</span>
+      <h2 class="section-title">About</h2>
+    </div>
+    <div class="about-grid">
+      <div>
+        <div class="about-bio">
+          <p>I am a rural development professional and researcher with over a decade of experience working across agrifood systems, value chain development, and climate adaptation — primarily in the Philippines and Southeast Asia.</p>
+          <p>I hold a dual master's degree in Rural Development from Ghent University, Universidad de Córdoba, Università di Pisa, and Can Tho University, completed <em>magna cum laude</em> as a VLIR-UOS scholar. My dissertation on gendered food security in rice-shrimp farming systems under climate stress won the Future Proef Award 2025 at UGent.</p>
+          <p>I am equally at home writing academic papers, running multi-stakeholder coordination, and facilitating capacity-building workshops for farmers and MSMEs in the field.</p>
+        </div>
+        <div class="chips">
+          <span class="chip">Value Chain Analysis</span>
+          <span class="chip">Mixed Methods Research</span>
+          <span class="chip">Gender Analysis</span>
+          <span class="chip">Climate Adaptation</span>
+          <span class="chip">Participatory Action Research</span>
+          <span class="chip">Agrifood Systems</span>
+          <span class="chip">M&amp;E</span>
+          <span class="chip">Policy-oriented Research</span>
+        </div>
+      </div>
+      <div class="about-details">
+        <div class="detail-row">
+          <span class="detail-label">Location</span>
+          <span class="detail-val">Baybay City, Leyte, Philippines</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Email</span>
+          <span class="detail-val"><a href="mailto:gbabilonia@proton.me" style="color:var(--amber);">gbabilonia@proton.me</a></span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">ORCiD</span>
+          <span class="detail-val"><a href="https://orcid.org/0009-0009-4134-3070" target="_blank" style="color:var(--amber);">0009-0009-4134-3070</a></span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Languages</span>
+          <span class="detail-val">English (IELTS 8 / C1) · Filipino · Cebuano · Waray · Spanish (A2) · Dutch (A1)</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Regional focus</span>
+          <span class="detail-val">Southeast Asia · Coastal &amp; island contexts · Indigenous communities</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Software</span>
+          <span class="detail-val">MAXQDA · QGIS · SPSS · SmartPLS · Qualtrics · MS Office</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="experience">
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="section-num">02</span>
+      <h2 class="section-title">Experience</h2>
+    </div>
+    <div class="exp-item">
+      <div class="exp-date">Jun 2025 – present</div>
+      <div>
+        <div class="exp-role">Independent Consultant</div>
+        <div class="exp-org">KEA Management Consultancy Services, Philippines</div>
+        <ul class="exp-bullets">
+          <li>Resource person and moderator, Southern Leyte Coconut Stakeholders' Meeting and Coconut-Cacao Industry Roadmap Updating for DTI RAPID Growth Project (Dec 2025)</li>
+          <li>Prepared Supply Analysis under the Vegetable Market Study for the Department of Agriculture</li>
+          <li>Prepared Mango Value Chain Study under the Supply/Value Chain Management Sustainability Plans for Guimaras State University</li>
+        </ul>
+      </div>
+    </div>
+    <div class="exp-item">
+      <div class="exp-date">Jan 2024 – Aug 2025</div>
+      <div>
+        <div class="exp-role">Master's Dissertation Researcher</div>
+        <div class="exp-org">Mekong Delta Development Research Institute, Vietnam</div>
+        <ul class="exp-bullets">
+          <li>Conducted mixed-methods research on sustainability transitions in rice-shrimp farming systems facing climate-induced salinity intrusion in the Mekong Delta</li>
+          <li>Deployed participatory methods, KIIs (n=34), FGDs, and participatory mapping across study sites</li>
+          <li>Analyzed data using HLPE's 6 dimensions of food security and constructivist grounded theory on MAXQDA</li>
+        </ul>
+      </div>
+    </div>
+    <div class="exp-item">
+      <div class="exp-date">Jan 2020 – Aug 2023</div>
+      <div>
+        <div class="exp-role">Provincial Project Coordinator</div>
+        <div class="exp-org">Department of Trade and Industry — Southern Leyte, Philippines</div>
+        <ul class="exp-bullets">
+          <li>Led a team of 4 in implementing the IFAD-funded RAPID Growth project across coconut, cacao, coffee, and jackfruit value chains in Southern Leyte</li>
+          <li>Prepared provincial investment plans for cacao and coconut industries, with IFAD approval</li>
+          <li>Facilitated capacity-building programs for over 2,000 farmers and MSMEs in production, processing, and market linkages</li>
+          <li>Supervised multi-stakeholder coordination across 20 LGUs, 30 farmer organizations, and national agencies</li>
+        </ul>
+      </div>
+    </div>
+    <div class="exp-item">
+      <div class="exp-date">Aug 2016 – Jul 2019</div>
+      <div>
+        <div class="exp-role">Research Assistant</div>
+        <div class="exp-org">International Potato Center (CIP), Philippines</div>
+        <ul class="exp-bullets">
+          <li>Led ground implementation and knowledge management for the FoodSTART+ Project on food resilience through root and tuber crops across Asia-Pacific</li>
+          <li>Provided technical support for Farmer Business Schools (FBS) and project M&amp;E; 625 direct and 1,612 indirect farmer beneficiaries</li>
+          <li>Co-developed the Aqua-based Business School (ABS-GCC), subsequently adopted by BFAR for nationwide implementation</li>
+        </ul>
+      </div>
+    </div>
+    <div class="exp-item">
+      <div class="exp-date">Jun 2014 – Jul 2016</div>
+      <div>
+        <div class="exp-role">Science Research Assistant</div>
+        <div class="exp-org">Philippine Root Crop Research and Training Center, Philippines</div>
+        <ul class="exp-bullets">
+          <li>Conducted KIIs and FGDs across 7 study sites for a DA-BAR-funded cassava value chain project</li>
+          <li>Trained, facilitated, and coordinated capacity-building activities in the value chain development phase</li>
+        </ul>
+      </div>
+    </div>
+    <div class="exp-item">
+      <div class="exp-date">Dec 2013 – Mar 2014</div>
+      <div>
+        <div class="exp-role">Undergraduate Research Assistant</div>
+        <div class="exp-org">WorldFish · Visayas State University, Philippines</div>
+        <ul class="exp-bullets">
+          <li>Conducted KIIs and FGDs across several parts of the Visayas to map cocoyam (<em>Xanthosoma sagittifolium</em>) under WorldFish's Aquatic Agricultural Systems (AAS) program</li>
+          <li>Examined cocoyam production and trade through value chain analysis</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="education">
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="section-num">03</span>
+      <h2 class="section-title">Education</h2>
+    </div>
+    <div class="edu-grid">
+      <div class="edu-card">
+        <div class="edu-degree">International Master of Science in Rural Development</div>
+        <div class="edu-inst">Ghent University · Universidad de Córdoba · Università di Pisa · Can Tho University</div>
+        <div class="edu-year">2023 – 2025</div>
+        <div class="edu-note">Thesis: <em>Gendered perceptions of food security in rice-shrimp farming systems under salinity intrusion in Vietnam</em><br>Specialization: Natural resources &amp; territorial studies | Minor: Rural livelihoods</div>
+        <span class="edu-badge">Magna cum laude · VLIR-UOS Scholar</span>
+      </div>
+      <div class="edu-card">
+        <div class="edu-degree">Máster Universitario en Desarrollo Rural</div>
+        <div class="edu-inst">Universidad de Córdoba, Spain</div>
+        <div class="edu-year">2023 – 2025</div>
+        <div class="edu-note">Dual degree pursued alongside the Erasmus Mundus IMRD programme.</div>
+        <span class="edu-badge">Diploma pending</span>
+      </div>
+      <div class="edu-card">
+        <div class="edu-degree">Bachelor of Science in Agribusiness</div>
+        <div class="edu-inst">Visayas State University, Philippines</div>
+        <div class="edu-year">2010 – 2014</div>
+        <div class="edu-note">Thesis: <em>Green value chain analysis of karlang (Xanthosoma sagittifolium) in selected AAS communities in Sogod, Southern Leyte</em> — finalist, Phi Delta Outstanding Thesis in Economics and Business</div>
+        <span class="edu-badge">Cum laude · Licensed Professional Agriculturist</span>
+      </div>
+      <div class="edu-card">
+        <div class="edu-degree">Postgraduate Units in Land Administration and Management</div>
+        <div class="edu-inst">Visayas State University, Philippines</div>
+        <div class="edu-year">2015 – 2017</div>
+        <div class="edu-note">12 units covering land economics, tenure, geodata technologies, demography, and land policy.</div>
+      </div>
+      <div class="edu-card">
+        <div class="edu-degree">Food and Innovation in Rural Transition: the Tuscany Case</div>
+        <div class="edu-inst">Università di Pisa Summer School, Italy</div>
+        <div class="edu-year">Jun – Jul 2024 · 10 ECTS</div>
+        <div class="edu-note">Immersive field experience on agricultural and rural studies in the Tuscan territory.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="publications">
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="section-num">04</span>
+      <h2 class="section-title">Publications</h2>
+    </div>
+    <div class="pub-item">
+      <div class="pub-title">Policy landscape and investment prioritization in Philippine farming system research and extension</div>
+      <div class="pub-meta">Sarabi, M.S., <strong>Babilonia, G.</strong>, &amp; Nguyen, T.B. · 3rd International Korkut Ata Scientific Research Conference, Vol. 2, pp. 314–323 · 2024</div>
+      <a class="pub-link" href="https://www.researchgate.net/publication/388230967" target="_blank">View on ResearchGate →</a>
+    </div>
+    <div class="pub-item">
+      <div class="pub-title">Value chain analysis for karlang (Xanthosoma sagittifolium) in selected aquatic and agricultural systems communities in Sogod, Southern Leyte, Philippines</div>
+      <div class="pub-meta">Abamo, A., <strong>Babilonia, G.</strong>, &amp; Cavite, H.J. · Journal of Educational and Human Resource Development, 8, 94–110 · 2020</div>
+      <a class="pub-link" href="https://doi.org/10.61569/k1q6d477" target="_blank">DOI: 10.61569/k1q6d477 →</a>
+    </div>
+    <div class="pub-item">
+      <div class="pub-title">Farmer Business Schools in Bohol: A gender assessment</div>
+      <div class="pub-meta">Kawarazuka, N., Teruel, R.T., &amp; <strong>Babilonia, G.</strong> · International Potato Center · 2019</div>
+      <a class="pub-link" href="https://doi.org/10.4160/9789290605317" target="_blank">DOI: 10.4160/9789290605317 →</a>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="section-num">05</span>
+      <h2 class="section-title">Honors &amp; Awards</h2>
+    </div>
+    <div class="awards-grid">
+      <div class="award-card">
+        <div class="award-year">2026</div>
+        <div class="award-title">Finalist, Flemish Future Proef Award</div>
+        <div class="award-org">Flemish Government — Best master's dissertation for sustainability across Flanders HEIs</div>
+      </div>
+      <div class="award-card">
+        <div class="award-year">2025</div>
+        <div class="award-title">Finalist (Europe &amp; Central Asia), FAO AgX Fair</div>
+        <div class="award-org">Food and Agriculture Organization, Rome — 1 of 6 finalists from 160 global submissions; team award for "Silent Spread" digital board game</div>
+      </div>
+      <div class="award-card">
+        <div class="award-year">2025</div>
+        <div class="award-title">CWO Research Grant</div>
+        <div class="award-org">Ghent University Faculty of Bioscience Engineering — Travel grant for master's dissertation fieldwork</div>
+      </div>
+      <div class="award-card">
+        <div class="award-year">2023</div>
+        <div class="award-title">VLIR-UOS Masters Scholarship</div>
+        <div class="award-org">VLIR-UOS — Full scholarship for Erasmus Mundus IMRD programme (2023–2025)</div>
+      </div>
+      <div class="award-card">
+        <div class="award-year">2017</div>
+        <div class="award-title">Best Ongoing Paper for Development</div>
+        <div class="award-org">ViCARP RRDEN Inter-Agency R&amp;D/Extension Review — Cassava value chain project, Baybay City</div>
+      </div>
+      <div class="award-card">
+        <div class="award-year">2014</div>
+        <div class="award-title">Leadership Award &amp; Honour Student</div>
+        <div class="award-org">Visayas State University — President, Society of Agribusiness Students; consistent college scholar 2010–2014</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="section-num">06</span>
+      <h2 class="section-title">Research &amp; Technical Skills</h2>
+    </div>
+    <div class="skills-grid">
+      <div>
+        <div class="skill-group-label">Research methods</div>
+        <ul class="skill-list">
+          <li>Mixed-methods research design</li>
+          <li>Participatory action research (PAR)</li>
+          <li>Constructivist grounded theory (CGT)</li>
+          <li>Value chain analysis (VCA)</li>
+          <li>SES framework (Ostrom)</li>
+          <li>Photovoice · Theory of Change</li>
+          <li>Stakeholder &amp; gender analysis</li>
+        </ul>
+      </div>
+      <div>
+        <div class="skill-group-label">Data collection</div>
+        <ul class="skill-list">
+          <li>Key informant interviews (KII)</li>
+          <li>Focus group discussions (FGD)</li>
+          <li>Household surveys</li>
+          <li>Participatory mapping</li>
+          <li>Multi-stakeholder platforms</li>
+          <li>Co-creation processes</li>
+        </ul>
+      </div>
+      <div>
+        <div class="skill-group-label">Communication &amp; outreach</div>
+        <ul class="skill-list">
+          <li>Art-science communication ("Silent Spread" board game)</li>
+          <li>Training material &amp; extension output development</li>
+          <li>Policy briefs for non-academic audiences</li>
+          <li>Farmer Business School facilitation</li>
+        </ul>
+      </div>
+      <div>
+        <div class="skill-group-label">Software &amp; tools</div>
+        <ul class="skill-list">
+          <li>MAXQDA (intermediate–proficient)</li>
+          <li>QGIS (basic–intermediate)</li>
+          <li>SPSS · SmartPLS (basic–intermediate)</li>
+          <li>Qualtrics (basic)</li>
+          <li>MS Office Suite (proficient)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact" style="border-bottom: none;">
+  <div class="contact-inner">
+    <h2 class="contact-heading">Let's work<br><em>together.</em></h2>
+    <div class="contact-links">
+      <a class="contact-link" href="mailto:githubpage.generic345@passinbox.com">
+        <span class="contact-link-label">Email</span>
+        gbabilonia@proton.me
+      </a>
+      <a class="contact-link" href="https://www.linkedin.com/in/gmbabilonia/" target="_blank">
+        <span class="contact-link-label">LinkedIn</span>
+        linkedin.com/in/gmbabilonia
+      </a>
+      <a class="contact-link" href="https://orcid.org/0009-0009-4134-3070" target="_blank">
+        <span class="contact-link-label">ORCiD</span>
+        0009-0009-4134-3070
+      </a>
+      <div class="contact-link">
+        <span class="contact-link-label">Location</span>
+        Baybay City, Leyte, Philippines
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>© 2026 Guada Babilonia</span>
+  <span>Baybay City, Leyte, Philippines</span>
+</footer>
+
+</body>
+</html>
