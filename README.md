@@ -1,6 +1,7 @@
 # gpbabilonia.github.io
 
-Personal website for **Guada Marie Babilonia** — Licensed Professional Agriculturist, development woker and researcher, and Erasmus Mundus alumna.
+Personal website for **Guada Marie Babilonia**
+Licensed Professional Agriculturist, development woker and researcher, and Erasmus Mundus alumna.
 
 🌐 **Live site:** [gpbabilonia.github.io](https://gpbabilonia.github.io)
 
