@@ -100,8 +100,23 @@
 
   .proj-boxes-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem; margin-bottom: 3rem; }
 
-  .subsection-label { font-size: 0.7rem; letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 0; padding-bottom: 0.75rem; border-bottom: 0.5px solid var(--border); }
-  .subsection-label a { color: var(--amber); }
+  .subsection-label { font-size: 0.7rem; letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 0; padding-bottom: 0.75rem; border-bottom: 0.5px solid var(--border); color: var(--muted); transition: color 0.2s; cursor: default; }
+  .subsection-label a { color: var(--muted); transition: color 0.2s; text-decoration: none; }
+  .subsection-label:hover, .subsection-label a:hover { color: var(--amber); }
+  .field-note-featured { border: 0.5px solid var(--border); border-radius: 2px; padding: 1.5rem; transition: background 0.2s; }
+  .field-note-featured:hover { background: var(--dark2); }
+  .field-note-tag { font-size: 0.62rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--amber); margin-bottom: 0.5rem; }
+  .field-note-title { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 400; line-height: 1.5; margin-bottom: 0.6rem; }
+  .field-note-title a:hover { color: var(--amber-light); }
+  .field-note-desc { font-size: 0.82rem; color: rgba(255,248,231,0.6); line-height: 1.75; margin-bottom: 0.75rem; }
+  .field-note-meta { font-size: 0.7rem; color: var(--muted); letter-spacing: 0.04em; }
+
+  .writing-intro { font-size: 0.88rem; color: var(--muted); line-height: 1.75; margin-bottom: 2.5rem; }
+  .writing-list { display: flex; flex-direction: column; border-top: 0.5px solid var(--border); }
+  .writing-item { padding: 0.85rem 0; border-bottom: 0.5px solid var(--border); display: flex; align-items: baseline; gap: 1.5rem; transition: background 0.2s; color: inherit; }
+  .writing-item:hover .writing-title { color: var(--amber-light); }
+  .writing-date { font-size: 0.68rem; letter-spacing: 0.1em; color: var(--amber); text-transform: uppercase; white-space: nowrap; flex-shrink: 0; }
+  .writing-title { font-size: 0.88rem; line-height: 1.55; color: rgba(255,248,231,0.85); transition: color 0.2s; flex: 1; }
 
   .awards-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); }
   .award-card { background: var(--dark); padding: 1.75rem; transition: background 0.2s; overflow: hidden; }
@@ -127,7 +142,7 @@
   footer { padding: 2rem 3rem; display: flex; justify-content: space-between; align-items: center; font-size: 0.72rem; color: var(--muted); letter-spacing: 0.06em; }
 
   /* scroll offset so section titles don't hide behind nav */
-  section, #sidequests { scroll-margin-top: 80px; }
+  section { scroll-margin-top: 60px; }
 
   .proj-box-img { width: 100%; height: 180px; object-fit: cover; border-radius: 2px; margin-bottom: 1.25rem; display: block; transition: transform 0.4s ease; }
   .proj-box:hover .proj-box-img { transform: scale(1.04); }
@@ -143,9 +158,6 @@
   .sq-card:hover img { transform: scale(1.04); }
   .sq-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(26,22,16,0.88) 0%, transparent 55%); }
   .sq-caption { position: absolute; bottom: 0; left: 0; right: 0; padding: 1.25rem; }
-  .subsection-label { font-size: 0.7rem; letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 0; padding-bottom: 0.75rem; border-bottom: 0.5px solid var(--border); color: var(--muted); transition: color 0.2s; cursor: default; }
-  .subsection-label a { color: var(--muted); transition: color 0.2s; text-decoration: none; }
-  .subsection-label:hover, .subsection-label a:hover { color: var(--amber); }
 
   .sq-caption-tag { font-size: 0.65rem; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,248,231,0.9); margin-bottom: 0.3rem; }
   .sq-caption-text { font-size: 0.88rem; color: var(--cream); line-height: 1.5; font-weight: 400; }
@@ -193,6 +205,7 @@
     .sq-grid { grid-template-columns: 1fr; }
     .sq-card { aspect-ratio: 16/9; }
     .sq-text-card { min-height: auto; padding: 1.5rem; }
+    .writing-item { flex-wrap: wrap; gap: 0.4rem; }
 
     footer { flex-direction: column; gap: 0.5rem; text-align: center; }
   }
@@ -201,7 +214,7 @@
 <body>
 
 <nav>
-  <span class="nav-name">Guada Babilonia</span>
+  <a href="#" class="nav-name">Guada Babilonia</a>
   <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
     <span></span><span></span><span></span>
   </button>
@@ -211,6 +224,7 @@
     <a href="#education" onclick="closeNav()">Education</a>
     <a href="#projects" onclick="closeNav()">Research</a>
     <a href="#milestones" onclick="closeNav()">Milestones</a>
+    <a href="#fromthefield" onclick="closeNav()">From the Field</a>
     <a href="#sidequests" onclick="closeNav()">Side Quests</a>
     <a href="#contact" onclick="closeNav()">Contact</a>
   </div>
@@ -450,6 +464,19 @@
         </ul>
       </div>
       <div>
+        <div class="skill-group-label">Coordination and outreach</div>
+        <ul class="skill-list">
+          <li>Project cycle management (PCM)</li>
+          <li>Multi-stakeholder facilitation</li>
+          <li>M&amp;E framework design and reporting</li>
+          <li>Budget planning and fund utilization</li>
+          <li>Art-science communication</li>
+          <li>Training material development</li>
+          <li>Policy briefs</li>
+          <li>Farmer Business School facilitation</li>
+        </ul>
+      </div>
+      <div>
         <div class="skill-group-label">Data collection</div>
         <ul class="skill-list">
           <li>Key informant interviews (KII)</li>
@@ -461,24 +488,10 @@
         </ul>
       </div>
       <div>
-        <div class="skill-group-label">Coordination and outreach</div>
-        <ul class="skill-list">
-          <li>Project cycle management (PCM)</li>
-          <li>Multi-stakeholder facilitation</li>
-          <li>M&amp;E framework design and reporting</li>
-          <li>Budget planning and fund utilization</li>
-          <li>Art-science communication</li>
-          <li>Training material and extension development</li>
-          <li>Policy briefs for non-academic audiences</li>
-          <li>Farmer Business School facilitation</li>
-        </ul>
-      </div>
-      <div>
         <div class="skill-group-label">Software and tools</div>
         <ul class="skill-list">
           <li>MAXQDA (intermediate–proficient)</li>
-          <li>QGIS (basic–intermediate)</li>
-          <li>SPSS · SmartPLS (basic–intermediate)</li>
+          <li>QGIS · SPSS · SmartPLS (basic–intermediate)</li>
           <li>Qualtrics (basic)</li>
           <li>MS Office Suite (proficient)</li>
         </ul>
@@ -533,10 +546,82 @@
   </div>
 </section>
 
-<section id="sidequests">
+<section id="fromthefield">
   <div class="section-inner">
     <div class="section-header">
       <span class="section-num">06</span>
+      <h2 class="section-title">From the Field</h2>
+    </div>
+    <p class="writing-intro">Blog entires written during my time with CIP FoodSTART+, originally published on the project website (now archived). Drafted on the ground, published with minimal editorial oversight. Small teams, multiple hats—but the work still needs to be communicated regardless.</p>
+
+    <!-- Featured 3 -->
+    <div style="display: flex; flex-direction: column; gap: 1.25rem; margin-bottom: 2.5rem;">
+
+      <div class="field-note-featured">
+        <div class="field-note-tag">Featured</div>
+        <div class="field-note-title"><a href="https://www.rtb.cgiar.org/news/balangiga-farmer-fisherfolk-women-learn-how-to-make-food-products-from-dried-cassava-grates/" target="_blank" rel="noopener noreferrer">Balangiga Farmer–Fisherfolk women learn how to make food products from dried cassava grates</a></div>
+        <div class="field-note-desc">The story of FACPAB, a group of farmer-fisherfolk wives from Eastern Samar who went from training to product launch in under a month. On cassava chips, macaroons, and what "not bad for a group trained only the previous week" actually means.</div>
+        <div class="field-note-meta">April 2019 · CIP FoodSTART+ / RTB CGIAR · <a href="https://web.archive.org/web/20200927111538/http://www.rtb.cgiar.org/foodstartplus/balangiga-farmer-fisherfolks-wives-learn-how-to-make-food-products-from-dried-cassava-grates/" target="_blank" rel="noopener noreferrer" style="color: var(--muted);">Wayback Machine ↗</a></div>
+      </div>
+
+      <div class="field-note-featured">
+        <div class="field-note-tag">Featured</div>
+        <div class="field-note-title"><a href="https://web.archive.org/web/20210228013601/http://www.rtb.cgiar.org/foodstartplus/additional-facilitators-of-aqua-based-business-school-for-eastern-visayas-and-caraga-trained/" target="_blank" rel="noopener noreferrer">Additional facilitators of Aqua-based Business School for Eastern Visayas and CARAGA trained</a></div>
+        <div class="field-note-desc">Scaling the ABS across two regions, 75 new facilitators trained across Tacloban and Butuan, covering fisheries, root crops, and gender-climate perspectives. On what it takes to move a methodology from pilot to region-wide.</div>
+        <div class="field-note-meta">May 2018 · CIP FoodSTART+</div>
+      </div>
+
+      <div class="field-note-featured">
+        <div class="field-note-tag">Featured</div>
+        <div class="field-note-title"><a href="https://web.archive.org/web/20230402021917/http://www.rtb.cgiar.org/foodstartplus/cip-foodstart-fishcoral-collaboration-implement-aqua-based-business-school/" target="_blank" rel="noopener noreferrer">CIP-FoodSTART+ and FishCORAL collaboration to implement the Aqua-based Business School in coastal communities</a></div>
+        <div class="field-note-desc">The first Training of Facilitators of its kind in the country, bringing the Farmer Business School approach into coastal and fishing communities in (the then) ARMM. The beginning of a methodology that would reach thousands.</div>
+        <div class="field-note-meta">December 2017 · CIP FoodSTART+ / IFAD Asia</div>
+      </div>
+
+    </div>
+
+    <!-- More field notes -->
+    <div class="subsection-label" style="margin-bottom: 1.25rem;">More field notes</div>
+    <div class="writing-list">
+
+      <a class="writing-item" href="https://web.archive.org/web/20220819193520/http://www.rtb.cgiar.org/foodstartplus/farmer-business-school-groups-supported-by-inremp-and-foodstart-pre-launch-root-crop-food-products-at-the-stakeholder-validation-workshop/" target="_blank" rel="noopener noreferrer">
+        <div class="writing-date">Jul 2018</div>
+        <div class="writing-title">Farmer Business School groups supported by INREMP and FoodSTART+ pre-launch root crop food products at the Stakeholder Validation Workshop</div>
+      </a>
+
+      <a class="writing-item" href="https://web.archive.org/web/20220706045728/http://www.rtb.cgiar.org/foodstartplus/foodstart-fbs-enrollees-learn-the-basics-of-financial-literacy/" target="_blank" rel="noopener noreferrer">
+        <div class="writing-date">May 2018</div>
+        <div class="writing-title">FoodSTART+ FBS Enrollees Learn the Basics of Financial Literacy</div>
+      </a>
+
+      <a class="writing-item" href="https://web.archive.org/web/20220706042208/http://www.rtb.cgiar.org/foodstartplus/new-aqua-based-business-school-curriculum-to-be-piloted-by-fishcoral-with-foodstart/" target="_blank" rel="noopener noreferrer">
+        <div class="writing-date">May 2018</div>
+        <div class="writing-title">New Aqua-based Business School curriculum to be piloted by FishCORAL with FoodSTART+</div>
+      </a>
+
+      <a class="writing-item" href="https://web.archive.org/web/20230402023319/http://www.rtb.cgiar.org/foodstartplus/foodstart-staff-shares-expertise-in-fishcorals-nation-wide-business-plan-development-training/" target="_blank" rel="noopener noreferrer">
+        <div class="writing-date">Aug 2017</div>
+        <div class="writing-title">FoodSTART+ staff shares expertise in FishCORAL's nation-wide Business plan development training</div>
+      </a>
+
+      <a class="writing-item" href="https://web.archive.org/web/20210228011029/http://www.rtb.cgiar.org/foodstartplus/foodstart-conducts-2nd-partners-meeting-hanoi/" target="_blank" rel="noopener noreferrer">
+        <div class="writing-date">May 2017</div>
+        <div class="writing-title">FoodSTART+ conducts 2nd Partners' Meeting in Hanoi</div>
+      </a>
+
+      <a class="writing-item" href="https://web.archive.org/web/20230402023024/http://www.rtb.cgiar.org/foodstartplus/foodstart-fishcoral-capacitate-facilitators-farmer-business-school-approach/" target="_blank" rel="noopener noreferrer">
+        <div class="writing-date">Apr 2017</div>
+        <div class="writing-title">FoodSTART+ and FishCORAL Capacitate Facilitators for Farmer Business School Approach</div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<section id="sidequests">
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="section-num">07</span>
       <h2 class="section-title">Side Quests</h2>
     </div>
     <div class="sq-grid">
@@ -544,7 +629,7 @@
       <div class="sq-text-card">
         <div class="sq-text-item">
           <div class="sq-text-label">Languages in progress</div>
-          <div class="sq-text-val">Learning Dutch and Spanish on Duolingo. Slowly. Stubbornly. Also picking up R — a language too, just a different kind. All three feel like unlocking another way of thinking about the world.</div>
+          <div class="sq-text-val">Learning Dutch and Spanish on Duolingo. Slowly. Stubbornly. Also picking up R—a language too, just a different kind. All three feel like unlocking another way of thinking about the world.</div>
         </div>
         <div class="sq-text-item">
           <div class="sq-text-label">Currently reading</div>
